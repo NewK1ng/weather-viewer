@@ -12,12 +12,14 @@ import java.io.IOException;
 public class SignInServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/signin.html").forward(req, resp);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+
+        String emailParam = req.getParameter("email");
+        String passwordParam = req.getParameter("password");
+
+        System.out.println(emailParam);
+        System.out.println(passwordParam);
+
+        resp.sendRedirect("/");
     }
 }
