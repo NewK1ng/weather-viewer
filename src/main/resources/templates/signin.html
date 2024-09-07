@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
         }
 
         .login-box {
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
         }
 
 
@@ -29,15 +29,26 @@
 
 <div class="login-bg">
     <div class="login-box w-25 bg-light p-4 rounded-3">
+
         <h5 class="text-center fs-1 pb-4 fw-bold  m-0">Sign In</h5>
+
+        <div th:if="${error}">
+            <div class="alert alert-danger" role="alert" th:text="${error}">
+                Login or password is incorrect
+            </div>
+        </div>
+
+
         <form action="/signin" method="post">
             <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                <label for="login" class="form-label">Login</label>
+                <input type="text" class="form-control" id="login" name="login" placeholder="Enter your login or email"
+                       required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Enter your password" required>
             </div>
             <div class="text-center pt-3">
                 <button type="submit" class="btn btn-primary w-100 fs-5">SIGN IN</button>
@@ -45,7 +56,7 @@
         </form>
 
         <div class="text-center pt-3">
-            <p>Don't have an account? <a href="register.html">Register</a></p>
+            <p>Don't have an account? <a href="../../webapp/register.html">Register</a></p>
         </div>
     </div>
 </div>

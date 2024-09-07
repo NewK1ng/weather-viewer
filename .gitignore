@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+out/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -38,3 +39,6 @@ build/
 .DS_Store
 /.idea/dataSources.xml
 /src/main/resources/hibernate.cfg.xml
+/.idea/uiDesigner.xml
+/.idea/artifacts/weather_viewer_war_exploded.xml
+/.idea/inspectionProfiles/Project_Default.xml
