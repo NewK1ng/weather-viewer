@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Session;
 import model.Users;
 import org.thymeleaf.context.Context;
 import service.AuthenticationService;
@@ -19,12 +21,23 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Context context = new Context();
-        ThymeleafUtils.getTemplateEngine().process("sign-in", context, resp.getWriter());
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            resp.sendRedirect("/");
+        } else {
+            ThymeleafUtils.getTemplateEngine().process("sign-in", new Context(), resp.getWriter());
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            resp.sendRedirect("/");
+        }
 
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
@@ -33,8 +46,13 @@ public class AuthenticationServlet extends HttpServlet {
 
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);
-            req.getSession().setAttribute("user", user);
+
+            session = req.getSession(true);
+            String sessionId = session.getId();
+            session.setAttribute("user", user);
+
             resp.sendRedirect("/");
+
         } catch (Exception e) {
             context.setVariable("error", e.getMessage());
         }

@@ -17,7 +17,6 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         Users user = (Users) req.getSession().getAttribute("user");
 
         Context context = new Context();
