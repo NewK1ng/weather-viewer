@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,15 +30,30 @@
 
             <div class="container w-50 p-0">
                 <form class="d-flex">
-                    <input type="search" class="form-control form-control-dark fs-5" placeholder="Enter the location name" aria-label="Search">
-                    <button class="btn btn-primary ms-2" type="submit">Search</button>
+                    <input type="search" class="form-control form-control-dark fs-5"
+                           placeholder="Enter the location name" aria-label="Search">
+                    <button class="btn btn-secondary ms-2 fw-bold" type="submit">Search</button>
                 </form>
             </div>
 
-            <div class="text-end">
-                <a href="signin" class="btn btn-outline-light me-1 fw-bold border border-2 border-white">Sign In</a>
-                <a href="register.html" class="btn btn-outline-warning fw-bold border border-2 border-warning">Register</a>
+            <div th:if="${user == null}">
+                <a href="sign-in" class="btn btn-light me-1 fw-bold">Sign In</a>
+                <a href="registration" class="btn btn-light fw-bold">Register</a>
             </div>
+
+            <div th:unless="${user == null}">
+                <div class="dropdown">
+                    <button class="btn btn-lg btn-success dropdown-toggle fw-bold text-white" type="button"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false" th:text="${user.login}">
+                        Alex
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark p-0" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item py-2 fs-5" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
 </header>
@@ -53,7 +68,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -64,7 +80,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -75,7 +92,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -86,7 +104,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -97,7 +116,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -108,7 +128,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -119,7 +140,8 @@
                     <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
                         <div class="d-flex align-items-center mb-4">
                             <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete</button>
+                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -129,8 +151,6 @@
     </div>
 
 </div>
-
-
 
 
 <!-- Bootstrap Bundle with Popper -->

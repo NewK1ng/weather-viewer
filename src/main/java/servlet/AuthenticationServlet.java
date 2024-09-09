@@ -12,7 +12,7 @@ import util.ThymeleafUtils;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/signin")
+@WebServlet(urlPatterns = "/sign-in")
 public class AuthenticationServlet extends HttpServlet {
 
     private final AuthenticationService authenticationService = new AuthenticationService();
@@ -20,7 +20,7 @@ public class AuthenticationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        ThymeleafUtils.getTemplateEngine().process("signin.html", context, resp.getWriter());
+        ThymeleafUtils.getTemplateEngine().process("sign-in", context, resp.getWriter());
     }
 
     @Override
@@ -29,24 +29,16 @@ public class AuthenticationServlet extends HttpServlet {
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
 
-        Users user = null;
-
         Context context = new Context();
 
         try {
-            user = authenticationService.signIn(loginParam, passwordParam);
+            Users user = authenticationService.signIn(loginParam, passwordParam);
+            req.getSession().setAttribute("user", user);
+            resp.sendRedirect("/");
         } catch (Exception e) {
             context.setVariable("error", e.getMessage());
         }
 
-//        context.setVariable("user", user);
-
-        ThymeleafUtils.getTemplateEngine().process("signin.html", context, resp.getWriter());
-
-
-
-
-//        req.setAttribute("user", user);
-//        resp.sendRedirect("/");
+        ThymeleafUtils.getTemplateEngine().process("sign-in", context, resp.getWriter());
     }
 }

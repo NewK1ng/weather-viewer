@@ -9,18 +9,20 @@ import java.util.Optional;
 
 public class UsersDAO {
 
-    public void save(Users users) throws Exception {
+    public void save(Users users) throws Error {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
+
                 session.persist(users);
+
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Exception("Login already exists", e);
+                throw new Error("Login already exists");
             }
         } catch (Exception e) {
-            throw new Exception(e);
+            throw new Error(e.getMessage());
         }
     }
 
