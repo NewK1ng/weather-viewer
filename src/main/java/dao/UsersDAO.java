@@ -26,7 +26,7 @@ public class UsersDAO {
         }
     }
 
-    public Optional<Users> get(String login) throws Error {
+    public Optional<Users> findByLogin(String login) throws Error {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -39,11 +39,8 @@ public class UsersDAO {
 
                 return Optional.ofNullable(userOpt);
             } catch (Exception e) {
-                session.getTransaction().rollback();
-                throw new Error("Login or password is incorrect");
+                throw new Error("Something went wrong with database when trying to find user");
             }
-        } catch (Exception e) {
-            throw new Error(e.getMessage());
         }
     }
 

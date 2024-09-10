@@ -21,8 +21,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Context context = new Context();
-        ThymeleafUtils.getTemplateEngine().process("registration", context, resp.getWriter());
+        ThymeleafUtils.getTemplateEngine().process("registration", new Context(), resp.getWriter());
     }
 
     @Override

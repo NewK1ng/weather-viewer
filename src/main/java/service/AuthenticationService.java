@@ -13,7 +13,7 @@ public class AuthenticationService {
 
     public Users signIn(String login, String password) throws Exception {
 
-        Optional<Users> userOpt = usersDAO.get(login);
+        Optional<Users> userOpt = usersDAO.findByLogin(login);
 
         if(userOpt.isPresent()) {
             Users user = userOpt.get();

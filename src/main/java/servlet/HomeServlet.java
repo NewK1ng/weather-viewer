@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Sessions;
 import model.Users;
 import org.thymeleaf.context.Context;
 import util.ThymeleafUtils;
@@ -17,16 +18,15 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Users user = (Users) req.getSession().getAttribute("user");
+        Sessions sessions = (Sessions) req.getSession().getAttribute("sessions");
 
         Context context = new Context();
 
-        if (user != null) {
-            context.setVariable("user", user);
+        if (sessions != null) {
+            context.setVariable("sessions", sessions);
         }
 
         ThymeleafUtils.getTemplateEngine().process("home", context, resp.getWriter());
-
     }
 
 }

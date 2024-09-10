@@ -2,42 +2,29 @@ package servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Session;
+import jakarta.servlet.http.*;
 import model.Users;
 import org.thymeleaf.context.Context;
 import service.AuthenticationService;
+import service.SessionService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet(urlPatterns = "/sign-in")
 public class AuthenticationServlet extends HttpServlet {
 
     private final AuthenticationService authenticationService = new AuthenticationService();
+    private final SessionService sessionService = new SessionService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-
-        if (session != null) {
-            resp.sendRedirect("/");
-        } else {
             ThymeleafUtils.getTemplateEngine().process("sign-in", new Context(), resp.getWriter());
-        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        HttpSession session = req.getSession(false);
-
-        if (session != null) {
-            resp.sendRedirect("/");
-        }
 
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
@@ -47,12 +34,12 @@ public class AuthenticationServlet extends HttpServlet {
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);
 
-            session = req.getSession(true);
-            String sessionId = session.getId();
-            session.setAttribute("user", user);
+            String sessionId = String.valueOf(sessionService.createSession(user));
+            Cookie cookie =  new Cookie("sessionId", sessionId);
+            cookie.setMaxAge(60 * 60 * 24 * 30);
+            resp.addCookie(cookie);
 
             resp.sendRedirect("/");
-
         } catch (Exception e) {
             context.setVariable("error", e.getMessage());
         }

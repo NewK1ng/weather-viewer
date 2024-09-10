@@ -1,7 +1,7 @@
 package util;
 
 import model.Location;
-import model.Session;
+import model.Sessions;
 import model.Users;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -15,7 +15,7 @@ public class HibernateUtil {
     static {
         Configuration cfg = new Configuration().configure("hibernate.cfg.xml");
         cfg.addAnnotatedClass(Users.class);
-        cfg.addAnnotatedClass(Session.class);
+        cfg.addAnnotatedClass(Sessions.class);
         cfg.addAnnotatedClass(Location.class);
 
         sessionFactory = cfg.buildSessionFactory();
