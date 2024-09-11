@@ -1,4 +1,4 @@
-package servlet;
+package servlet.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,7 +28,6 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
 

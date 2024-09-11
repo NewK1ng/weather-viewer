@@ -1,4 +1,4 @@
-package servlet;
+package servlet.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,7 +11,6 @@ import service.RegistrationService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/registration")
@@ -26,7 +25,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
         String confirmPasswordParam = req.getParameter("confirmPassword");

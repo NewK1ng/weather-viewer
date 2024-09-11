@@ -20,8 +20,6 @@ public class SessionsDAO {
                 session.getTransaction().rollback();
                 throw new Error("Session already exists");
             }
-        } catch (Exception e) {
-            throw new Error(e.getMessage());
         }
     }
 
@@ -35,8 +33,6 @@ public class SessionsDAO {
                 session.getTransaction().rollback();
                 throw new Error("Something went wrong with database when trying to update session");
             }
-        } catch (Exception e) {
-            throw new Error(e.getMessage());
         }
     }
 
@@ -50,24 +46,23 @@ public class SessionsDAO {
                 session.getTransaction().rollback();
                 throw new Error("Something went wrong with database when trying to delete session");
             }
-        } catch (Exception e) {
-            throw new Error(e.getMessage());
         }
     }
 
     public Optional<Sessions> findById(UUID id) throws Error {
         try (Session session = HibernateUtil.getCurrentSession()) {
-            session.beginTransaction();
+            try {
+                session.beginTransaction();
+                Sessions sessions = session.createQuery("FROM Sessions s JOIN FETCH s.user u WHERE s.id = :id", Sessions.class)
+                        .setParameter("id", id)
+                        .getSingleResultOrNull();
+                session.getTransaction().commit();
 
-            Sessions sessions = session.createQuery("FROM Sessions s JOIN FETCH s.user u WHERE s.id = :id", Sessions.class)
-                    .setParameter("id", id)
-                    .getSingleResultOrNull();
-
-            session.getTransaction().commit();
-
-            return Optional.ofNullable(sessions);
-        } catch (Exception e) {
-            throw new Error("Something went wrong with database when trying to find session");
+                return Optional.ofNullable(sessions);
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new Error("Something went wrong with database when trying to find session");
+            }
         }
     }
 

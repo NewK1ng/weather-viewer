@@ -12,21 +12,16 @@ public class AuthenticationService {
     private final UsersDAO usersDAO = new UsersDAO();
 
     public Users signIn(String login, String password) throws Exception {
-
         Optional<Users> userOpt = usersDAO.findByLogin(login);
 
         if(userOpt.isPresent()) {
             Users user = userOpt.get();
-
             if(checkPassword(password, user.getPassword())) {
                 return user;
-            } else {
-                throw new Error("Login or password is incorrect");
             }
-        } else {
-            throw new Error("Login or password is incorrect");
         }
 
+        throw new Error("Login or password is incorrect");
     }
 
     public boolean checkPassword(String password, String hash) {

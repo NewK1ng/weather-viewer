@@ -21,14 +21,13 @@ public class UsersDAO {
                 session.getTransaction().rollback();
                 throw new Error("Login already exists");
             }
-        } catch (Exception e) {
-            throw new Error(e.getMessage());
         }
     }
 
     public Optional<Users> findByLogin(String login) throws Error {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
+
                 session.beginTransaction();
 
                 Users userOpt = session.createQuery("FROM Users u WHERE u.login = :login", Users.class)
@@ -39,6 +38,7 @@ public class UsersDAO {
 
                 return Optional.ofNullable(userOpt);
             } catch (Exception e) {
+                session.getTransaction().rollback();
                 throw new Error("Something went wrong with database when trying to find user");
             }
         }

@@ -8,6 +8,11 @@
   <name>weather-viewer Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
+  <properties>
+    <maven.compiler.source>22</maven.compiler.source>
+    <maven.compiler.target>22</maven.compiler.target>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -48,6 +53,7 @@
       <version>3.1.2.RELEASE</version>
     </dependency>
   </dependencies>
+
   <build>
     <finalName>weather-viewer</finalName>
   </build>

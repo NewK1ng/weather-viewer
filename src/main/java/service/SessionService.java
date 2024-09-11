@@ -44,8 +44,6 @@ public class SessionService {
            if(!isExpired(sessions)) {
                updateExpiresAt(sessions);
                return sessions;
-           } else {
-               sessionsDAO.delete(sessions);
            }
        }
        return null;
