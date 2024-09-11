@@ -2,7 +2,6 @@ package servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,10 +21,12 @@ public class LogOutServlet extends HttpServlet {
 
         SessionService sessionService = new SessionService();
 
-        try {
-            sessionService.deleteSession(sessions);
-        } catch (Error e) {
-            throw new RuntimeException(e);
+        if (sessions != null) {
+            try {
+                sessionService.delete(sessions);
+            } catch (Error e) {
+                throw new RuntimeException(e);
+            }
         }
 
         req.getSession().invalidate();

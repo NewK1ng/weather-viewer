@@ -35,7 +35,7 @@ public class SessionServletFilter extends HttpFilter {
                             req.getSession().setAttribute("sessions", sessions);
                         }
                     } catch (Error e) {
-                        req.getSession().setAttribute("sessions", null);
+                        throw new RuntimeException(e);
                     }
                 }
             }

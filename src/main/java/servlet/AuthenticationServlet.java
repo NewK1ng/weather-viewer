@@ -10,7 +10,6 @@ import service.SessionService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @WebServlet(urlPatterns = "/sign-in")
 public class AuthenticationServlet extends HttpServlet {
@@ -20,7 +19,11 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            ThymeleafUtils.getTemplateEngine().process("sign-in", new Context(), resp.getWriter());
+        if (req.getSession().getAttribute("sessions") != null) {
+            resp.sendRedirect("/");
+        }
+
+        ThymeleafUtils.getTemplateEngine().process("sign-in", new Context(), resp.getWriter());
     }
 
     @Override
@@ -34,8 +37,8 @@ public class AuthenticationServlet extends HttpServlet {
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);
 
-            String sessionId = String.valueOf(sessionService.createSession(user));
-            Cookie cookie =  new Cookie("sessionId", sessionId);
+            String sessionId = String.valueOf(sessionService.create(user));
+            Cookie cookie = new Cookie("sessionId", sessionId);
             cookie.setMaxAge(60 * 60 * 24 * 30);
             resp.addCookie(cookie);
 

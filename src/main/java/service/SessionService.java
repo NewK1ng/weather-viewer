@@ -4,7 +4,6 @@ import dao.SessionsDAO;
 import model.Error;
 import model.Sessions;
 import model.Users;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -16,8 +15,7 @@ public class SessionService {
     private final static int SESSION_TIMEOUT_MINUTES = 30;
     private final static int ATTEMPTS_TO_CREATE_SESSION = 2;
 
-
-    public UUID createSession(Users user) throws Error {
+    public UUID create(Users user) throws Error {
         for (int i = 0; i < ATTEMPTS_TO_CREATE_SESSION; i++) {
             try {
                 UUID sessionId = UUID.randomUUID();
@@ -43,8 +41,8 @@ public class SessionService {
 
            Sessions sessions = sessionsOpt.get();
 
-           if(!checkIfExpired(sessions)) {
-               updateSessionExpiresAt(sessions);
+           if(!isExpired(sessions)) {
+               updateExpiresAt(sessions);
                return sessions;
            } else {
                sessionsDAO.delete(sessions);
@@ -53,21 +51,18 @@ public class SessionService {
        return null;
     }
 
-    public void deleteSession(Sessions sessions) throws Error {
+    public void delete(Sessions sessions) throws Error {
         sessionsDAO.delete(sessions);
     }
 
-    private void updateSessionExpiresAt(Sessions sessions) throws Error {
+    private void updateExpiresAt(Sessions sessions) throws Error {
         sessions.setExpiresAt(LocalDateTime.now().plusMinutes(SESSION_TIMEOUT_MINUTES));
         sessionsDAO.update(sessions);
     }
 
-    private boolean checkIfExpired(Sessions sessions) {
+    private boolean isExpired(Sessions sessions) {
         return sessions.getExpiresAt().isBefore(LocalDateTime.now());
     }
-
-
-
 
 }
 

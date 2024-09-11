@@ -61,7 +61,7 @@ public class SessionsDAO {
 
             Sessions sessions = session.createQuery("FROM Sessions s JOIN FETCH s.user u WHERE s.id = :id", Sessions.class)
                     .setParameter("id", id)
-                    .getSingleResult();
+                    .getSingleResultOrNull();
 
             session.getTransaction().commit();
 
