@@ -2,8 +2,8 @@ package service;
 
 import dao.SessionsDAO;
 import model.Error;
-import model.Sessions;
-import model.Users;
+import model.entities.Sessions;
+import model.entities.Users;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

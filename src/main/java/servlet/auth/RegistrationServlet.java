@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
 import org.thymeleaf.context.Context;
-import service.RegistrationService;
+import service.auth.RegistrationService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;

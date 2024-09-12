@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
-import model.Sessions;
+import model.entities.Sessions;
 import service.SessionService;
 
 import java.io.IOException;

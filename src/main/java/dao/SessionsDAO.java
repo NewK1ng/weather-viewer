@@ -1,7 +1,7 @@
 package dao;
 
 import model.Error;
-import model.Sessions;
+import model.entities.Sessions;
 import org.hibernate.Session;
 import util.HibernateUtil;
 

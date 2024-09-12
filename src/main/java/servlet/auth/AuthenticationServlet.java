@@ -3,9 +3,9 @@ package servlet.auth;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import model.Users;
+import model.entities.Users;
 import org.thymeleaf.context.Context;
-import service.AuthenticationService;
+import service.auth.AuthenticationService;
 import service.SessionService;
 import util.ThymeleafUtils;
 

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
-import model.Sessions;
+import model.entities.Sessions;
 import service.SessionService;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class LogOutServlet extends HttpServlet {
             try {
                 sessionService.delete(sessions);
             } catch (Error e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e.getMessage());
             }
         }
 

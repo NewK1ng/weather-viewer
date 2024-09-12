@@ -1,8 +1,8 @@
-package service;
+package service.auth;
 
 import dao.UsersDAO;
 import model.Error;
-import model.Users;
+import model.entities.Users;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;

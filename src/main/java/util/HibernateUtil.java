@@ -1,8 +1,8 @@
 package util;
 
-import model.Location;
-import model.Sessions;
-import model.Users;
+import model.entities.Location;
+import model.entities.Sessions;
+import model.entities.Users;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

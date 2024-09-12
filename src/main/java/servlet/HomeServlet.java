@@ -5,8 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Sessions;
-import model.Users;
+import model.entities.Sessions;
 import org.thymeleaf.context.Context;
 import util.ThymeleafUtils;
 

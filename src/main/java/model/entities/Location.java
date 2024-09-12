@@ -1,34 +1,40 @@
-package model;
+package model.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
 @Setter
+@Entity
 @ToString
 @NoArgsConstructor
-@Entity
-@Table(name = "users")
-public class Users {
-
+@Table(name = "locations")
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "login")
-    private String login;
+    @Column(name = "name", nullable = false, length = 128)
+    private String name;
 
-    @Column(name = "password")
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    private Users user;
 
-    public Users(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
+    @Column(name = "latitude", nullable = false)
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private BigDecimal longitude;
 
     @Override
     public final boolean equals(Object o) {
@@ -37,8 +43,8 @@ public class Users {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Users users = (Users) o;
-        return getId() != null && Objects.equals(getId(), users.getId());
+        Location location = (Location) o;
+        return getId() != null && Objects.equals(getId(), location.getId());
     }
 
     @Override
