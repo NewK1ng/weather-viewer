@@ -16,9 +16,23 @@
         }
 
         .secondary-box {
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
         }
 
+        .img-temp {
+            position: relative;
+        }
+
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+        }
+
+        .fixed-height {
+            min-height: 28px; /* Установите высоту по вашему выбору */
+        }
 
     </style>
 </head>
@@ -68,34 +82,60 @@
 
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
 
-            <th:block th:each="location:${locations}">
+            <th:block th:each="location:${locationsWeather}">
 
-                <div class="col">
-                    <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                        <div class="d-flex flex-column h-100 p-3 text-white text-shadow-1">
-                            <div class="d-flex justify-content-between">
-                                <div class="overflow-hidden p-2">
-                                    <h2 class="fs-3 lh-1 fw-bold mb-0"
-                                        th:text="${location.getName()} + ', ' + ${location.getCountry()}">London, UA
-                                    </h2>
-                                    <h2 class="fs-5 lh-1 fw-bold mb-0 text-secondary pt-2" th:text="${location.getState()}">
-                                        Mykolaivskia oblast
-                                    </h2>
+                <div th:each="weather : ${location.getWeather()}">
+                    <div class="col">
+                        <div class=" card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 secondary-box border-0">
+                            <div class="d-flex flex-column h-100 text-white text-shadow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div class="overflow-hidden ps-3 pb-3 pt-3 flex-fill">
+                                        <div class="text-center">
+                                            <div class="fs-3 lh-1 fw-bold mb-0"
+                                                 th:text="${location.getName()} + ', ' + ${location.getCountry()}">
+                                                London,
+                                                UA
+                                            </div>
+                                            <div class="fs-5 lh-1 fw-bold mb-0 pt-2 text-secondary fixed-height"
+                                                 th:text="${location.getState()}">
+Область
+                                            </div>
+                                        </div>
+
+                                        <div class="rounded-5 text-center"
+                                             style="background-color: rgba(255,255,255,0.15)">
+                                            <div class="display-1 fs-3 mt-3 mb-0 p-2" th:text="${weather.getMain()}">
+                                                Дождь
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="img-temp text-center pe-3">
+                                        <img class=""
+                                             th:src="@{'https://openweathermap.org/img/wn/' + ${weather.getIcon()} + '@2x.png'}"
+                                             alt="Weather icon">
+                                        <div class="display-1 fs-2 lh-1 centered"
+                                             th:text="${location.getMain().getTemp()} + '°'">
+                                            24.5°
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-lg btn-primary ms-2 text-light fw-bold p-2">
-                                        Add
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="d-flex flex-column mt-auto">
+                                <button type="button" class="rounded-0 btn btn-secondary btn-lg border-0 text-light fw-bold">
+                                    Add
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </th:block>
-
         </div>
     </div>
+
+
+</div>
+</div>
 
 </div>
 
