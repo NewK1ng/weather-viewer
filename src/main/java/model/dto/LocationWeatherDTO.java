@@ -57,6 +57,8 @@ public class LocationWeatherDTO {
         private double temp_max;
         @JsonProperty("humidity")
         private double humidity;
+        @JsonProperty("feels_like")
+        private double feels_like;
     }
 
 

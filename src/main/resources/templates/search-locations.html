@@ -25,20 +25,56 @@
 
         .centered {
             position: absolute;
-            top: 50%;
+            top: 60%;
             left: 0;
             width: 100%;
         }
 
         .fixed-height {
-            min-height: 28px; /* Установите высоту по вашему выбору */
+            min-height: 28px;
+        }
+
+        .fixed-height-card {
+            min-height: 200px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Устанавливает высоту на весь viewport */
+            background-image: url(https://images.wallpaperscraft.ru/image/single/more_oblaka_nebo_1309326_3840x2400.jpg); /* Путь к вашему изображению */
+            background-size: cover; /* Изображение масштабируется по размеру экрана */
+            background-position: center; /* Центрирование изображения */
+            background-repeat: no-repeat; /* Запрет на повторение */
+            background-attachment: fixed; /* Картинка остаётся фиксированной при скролле */
+        }
+
+        .transparent-bg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .transparent-bg::before {
+            border-radius: 30px;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.6; /* Степень прозрачности фона */
+            z-index: -1; /* Фон под контентом */
         }
 
     </style>
 </head>
 <body>
 
-<header class="p-4 bg-dark text-white">
+<header class="p-4 bg-dark text-white" >
     <div class="container px-4">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
@@ -76,9 +112,9 @@
     </div>
 </header>
 
-<div class="main-box container bg-light p-4 my-4 rounded-5">
-    <div class="container" id="custom-cards">
-        <h2 class="pb-3 border-bottom border-2 text-center fs-1 fw-bold">Current weather</h2>
+<div class="main-box container p-4 my-4 rounded-5 transparent-bg">
+    <div class="container" id="custom-cards" >
+        <div class="border-dark text-center display-5 fw-bold text-dark pb-4 w-100">Current weather</div>
 
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
 
@@ -86,50 +122,92 @@
 
                 <div th:each="weather : ${location.getWeather()}">
                     <div class="col">
-                        <div class=" card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 secondary-box border-0">
-                            <div class="d-flex flex-column h-100 text-white text-shadow-1">
-                                <div class="d-flex justify-content-between">
-                                    <div class="overflow-hidden ps-3 pb-3 pt-3 flex-fill">
-                                        <div class="text-center">
-                                            <div class="fs-3 lh-1 fw-bold mb-0"
-                                                 th:text="${location.getName()} + ', ' + ${location.getCountry()}">
-                                                London,
-                                                UA
-                                            </div>
-                                            <div class="fs-5 lh-1 fw-bold mb-0 pt-2 text-secondary fixed-height"
-                                                 th:text="${location.getState()}">
-Область
-                                            </div>
+                        <div class="card card-cover h-100 overflow-hidden text-light rounded-5 secondary-box border-2 border-light" style="background-color: rgb(31,34,35)">
+                            <div class="d-flex flex-column h-100 text-light text-shadow-1 fixed-height-card align-items-center justify-content-center">
+                                <div class="d-flex gap-4">
+                                    <div class="overflow-hidden flex-fill text-center col-9 ms-3 mt-3">
+                                        <div class="fs-3 lh-1 fw-bold mb-0"
+                                             th:text="${location.getName()} + ', ' + ${location.getCountry()}">
+                                            London,
+                                            UAsdasdasdasdasdasda
                                         </div>
-
+                                        <div class="fs-5 lh-1 fw-bold mb-0 pt-2 text-secondary fixed-height"
+                                             th:text="${location.getState()}">
+                                            Область
+                                        </div>
                                         <div class="rounded-5 text-center"
                                              style="background-color: rgba(255,255,255,0.15)">
-                                            <div class="display-1 fs-3 mt-3 mb-0 p-2" th:text="${weather.getMain()}">
+                                            <div class="display-1 fs-3 mt-3 mb-0 p-2"
+                                                 th:text="${weather.getDescription()}">
                                                 Дождь
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="img-temp text-center pe-3">
+                                    <div class="img-temp text-center col-4 mt-3">
                                         <img class=""
                                              th:src="@{'https://openweathermap.org/img/wn/' + ${weather.getIcon()} + '@2x.png'}"
                                              alt="Weather icon">
-                                        <div class="display-1 fs-2 lh-1 centered"
+                                        <div class="display-1 fs-2 lh-1 centered text-warning"
                                              th:text="${location.getMain().getTemp()} + '°'">
                                             24.5°
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex flex-column mt-auto">
-                                <button type="button" class="rounded-0 btn btn-secondary btn-lg border-0 text-light fw-bold">
+                            <div class="container text-center">
+                                <div class="row mb-4 mt-2">
+                                    <div class="col-6 border border-secondary p-0">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Temperature
+                                        </div>
+                                        <div class="d-flex justify-content-center gap-3 p-1">
+                                            <div>
+                                                Min
+                                                <div th:text="${location.getMain().getTemp_min()} + '°'">
+                                                    24.66
+                                                </div>
+                                            </div>
+                                            <div>
+                                                Max
+                                                <div th:text="${location.getMain().getTemp_max()} + '°'">
+                                                    24.66
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 border border-secondary p-0 opacity-">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Feels like
+                                        </div>
+                                        <div class="p-3" th:text="${location.getMain().getFeels_like()} + '°'">
+                                            86
+                                        </div>
+                                    </div>
+                                    <div class="col-3 border border-secondary p-0">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Humidity
+                                        </div>
+                                        <div class="p-3" th:text="${location.getMain().getHumidity()} + ' мм'">
+                                            86
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center pb-4">
+                                <button type="button"
+                                        class="btn btn-secondary btn-lg text-light fw-bold rounded-0 border-0">
                                     Add
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </th:block>
+
+
         </div>
     </div>
 

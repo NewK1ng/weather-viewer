@@ -21,7 +21,7 @@ public class WeatherService {
         for (LocationDTO locationDTO : locationDTOList) {
             try {
                 uri = new URI("https://api.openweathermap.org/data/2.5/weather?lat=" + locationDTO.getLatitude() +
-                        "&lon=" + locationDTO.getLongitude() + "&units=metric&appid=" + System.getenv("APP_ID") + "&lang=uk");
+                        "&lon=" + locationDTO.getLongitude() + "&units=metric&appid=" + System.getenv("APP_ID") + "&lang=en");
                 try {
                     String response = HttpClientUtils.sendGetRequest(uri);
 
