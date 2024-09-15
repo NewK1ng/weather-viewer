@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
 import model.entities.Sessions;
-import service.SessionService;
+import service.SessionsHandlerService;
 
 import java.io.IOException;
 
@@ -17,11 +17,11 @@ public class LogOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Sessions sessions = (Sessions) req.getSession().getAttribute("sessions");
-        SessionService sessionService = new SessionService();
+        SessionsHandlerService sessionsHandlerService = new SessionsHandlerService();
 
         if (sessions != null) {
             try {
-                sessionService.delete(sessions);
+                sessionsHandlerService.delete(sessions);
             } catch (Error e) {
                 throw new RuntimeException(e.getMessage());
             }

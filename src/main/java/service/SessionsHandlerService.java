@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SessionService {
+public class SessionsHandlerService {
 
     private final SessionsDAO sessionsDAO = new SessionsDAO();
     private final static int SESSION_TIMEOUT_MINUTES = 30;

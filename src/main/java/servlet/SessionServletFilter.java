@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
 import model.entities.Sessions;
-import service.SessionService;
+import service.SessionsHandlerService;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -25,9 +25,9 @@ public class SessionServletFilter extends HttpFilter {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("sessionId")) {
-                    SessionService sessionService = new SessionService();
+                    SessionsHandlerService sessionsHandlerService = new SessionsHandlerService();
                     try {
-                        Sessions sessions = sessionService.findById(UUID.fromString(cookie.getValue()));
+                        Sessions sessions = sessionsHandlerService.findById(UUID.fromString(cookie.getValue()));
                         if(sessions != null) {
                             req.getSession().setAttribute("sessions", sessions);
                         } else {

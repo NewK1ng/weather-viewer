@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 import model.entities.Users;
 import org.thymeleaf.context.Context;
 import service.auth.AuthenticationService;
-import service.SessionService;
+import service.SessionsHandlerService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class AuthenticationServlet extends HttpServlet {
 
     private final AuthenticationService authenticationService = new AuthenticationService();
-    private final SessionService sessionService = new SessionService();
+    private final SessionsHandlerService sessionsHandlerService = new SessionsHandlerService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,7 +36,7 @@ public class AuthenticationServlet extends HttpServlet {
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);
 
-            String sessionId = String.valueOf(sessionService.create(user));
+            String sessionId = String.valueOf(sessionsHandlerService.create(user));
             Cookie cookie = new Cookie("sessionId", sessionId);
             cookie.setMaxAge(60 * 60 * 24 * 30);
             resp.addCookie(cookie);
