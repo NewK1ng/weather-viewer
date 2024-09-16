@@ -70,11 +70,24 @@
             z-index: -1; /* Фон под контентом */
         }
 
+        .btn-primary {
+            background-color: rgb(54, 94, 37); /* Оранжевый с легкой прозрачностью */
+            border-color: rgb(62, 94, 28); /* Темный оранжевый для границ */
+            border-right: 0;
+            border-left: 0;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(64, 129, 35); /* Оранжевый с легкой прозрачностью */
+            border-color: rgb(66, 96, 34); /* Темный оранжевый для границ */
+            border-right: 0;
+            border-left: 0; /* Томато для границ */
+        }
     </style>
 </head>
 <body>
 
-<header class="p-4 bg-dark text-white" >
+<header class="p-4 text-white" style="background-color: rgb(35,35,35);">
     <div class="container px-4">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
@@ -97,7 +110,7 @@
 
             <div th:unless="${sessions == null}">
                 <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle text-white" type="button"
+                    <button class="btn btn-lg btn-success dropdown-toggle text-white" type="button"
                             id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false" th:text="${sessions.getUser().login}">
                         Alex
@@ -113,21 +126,21 @@
 </header>
 
 <div class="main-box container p-4 my-4 rounded-5 transparent-bg">
-    <div class="container" id="custom-cards" >
-        <div class="border-dark text-center display-5 fw-bold text-dark pb-4 w-100">Current weather</div>
+    <div class="container" id="custom-cards">
+        <div class="border-dark text-center display-4 fw-bold text-dark pb-4 w-100">Search Results</div>
 
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
-
             <th:block th:each="location:${locationsWeather}">
 
                 <div th:each="weather : ${location.getWeather()}">
                     <div class="col">
-                        <div class="card card-cover h-100 overflow-hidden text-light rounded-5 secondary-box border-2 border-light" style="background-color: rgb(31,34,35)">
-                            <div class="d-flex flex-column h-100 text-light text-shadow-1 fixed-height-card align-items-center justify-content-center">
-                                <div class="d-flex gap-4">
+                        <div class="card card-cover h-100 overflow-hidden text-light rounded-5 secondary-box border-2 border-light"
+                             style="background-color: rgb(41,41,41)">
+                            <div class="d-flex flex-column h-100 text-light text-shadow-1 fixed-height-card">
+                                <div class="d-flex gap-4 mt-3 mx-3">
                                     <div class="overflow-hidden flex-fill text-center col-9 ms-3 mt-3">
                                         <div class="fs-3 lh-1 fw-bold mb-0"
-                                             th:text="${location.getName()} + ', ' + ${location.getCountry()}">
+                                             th:text="${location.getName()} + ', ' + ${location.getSys().getCountry()}">
                                             London,
                                             UAsdasdasdasdasdasda
                                         </div>
@@ -136,7 +149,7 @@
                                             Область
                                         </div>
                                         <div class="rounded-5 text-center"
-                                             style="background-color: rgba(255,255,255,0.15)">
+                                             style="background-color: rgb(58,58,58)">
                                             <div class="display-1 fs-3 mt-3 mb-0 p-2"
                                                  th:text="${weather.getDescription()}">
                                                 Дождь
@@ -144,20 +157,20 @@
                                         </div>
 
                                     </div>
-                                    <div class="img-temp text-center col-4 mt-3">
+                                    <div class="text-center col-4 d-flex flex-column align-items-center">
                                         <img class=""
                                              th:src="@{'https://openweathermap.org/img/wn/' + ${weather.getIcon()} + '@2x.png'}"
                                              alt="Weather icon">
-                                        <div class="display-1 fs-2 lh-1 centered text-warning"
+                                        <div class="display-1 fs-2 lh-1 text-warning text-center"
                                              th:text="${location.getMain().getTemp()} + '°'">
                                             24.5°
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="container text-center">
-                                <div class="row mb-4 mt-2">
-                                    <div class="col-6 border border-secondary p-0">
+                            <div class="container text-center my-3">
+                                <div class="row mb-3 mt-2">
+                                    <div class="col-6 border-0 border-top border-bottom border-secondary p-0">
                                         <div class="border-bottom border-secondary fw-bold p-2">
                                             Temperature
                                         </div>
@@ -184,7 +197,7 @@
                                             86
                                         </div>
                                     </div>
-                                    <div class="col-3 border border-secondary p-0">
+                                    <div class="col-3 border-0 border-top border-bottom border-secondary p-0">
                                         <div class="border-bottom border-secondary fw-bold p-2">
                                             Humidity
                                         </div>
@@ -192,15 +205,17 @@
                                             86
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="d-flex flex-column justify-content-center pb-4">
-                                <button type="button"
-                                        class="btn btn-secondary btn-lg text-light fw-bold rounded-0 border-0">
-                                    Add
-                                </button>
-                            </div>
+                            <form action="/track-location" method="post" th:if="${sessions != null}">
+                                <div class="pb-3 d-flex flex-column mb-3">
+                                    <input type="hidden" name="name" th:value="${location.getName()}"/>
+                                    <input type="hidden" name="latitude" th:value="${location.getLatitude()}"/>
+                                    <input type="hidden" name="longitude" th:value="${location.getLongitude()}"/>
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-0 text-light">Add
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
