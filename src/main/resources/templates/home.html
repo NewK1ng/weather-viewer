@@ -15,12 +15,79 @@
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
         }
 
+        .secondary-box {
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+        }
 
+        .img-temp {
+            position: relative;
+        }
+
+        .centered {
+            position: absolute;
+            top: 60%;
+            left: 0;
+            width: 100%;
+        }
+
+        .fixed-height {
+            min-height: 28px;
+        }
+
+        .fixed-height-card {
+            min-height: 200px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Устанавливает высоту на весь viewport */
+            background-image: url(https://images.wallpaperscraft.ru/image/single/more_oblaka_nebo_1309326_3840x2400.jpg); /* Путь к вашему изображению */
+            background-size: cover; /* Изображение масштабируется по размеру экрана */
+            background-position: center; /* Центрирование изображения */
+            background-repeat: no-repeat; /* Запрет на повторение */
+            background-attachment: fixed; /* Картинка остаётся фиксированной при скролле */
+        }
+
+        .transparent-bg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .transparent-bg::before {
+            border-radius: 30px;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.6; /* Степень прозрачности фона */
+            z-index: -1; /* Фон под контентом */
+        }
+
+        .btn-primary {
+            background-color: rgb(89, 29, 29); /* Оранжевый с легкой прозрачностью */
+            border-color: rgb(94, 30, 30); /* Темный оранжевый для границ */
+            border-right: 0;
+            border-left: 0;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(138, 37, 37); /* Оранжевый с легкой прозрачностью */
+            border-color: rgb(94, 30, 30);/* Темный оранжевый для границ */
+            border-right: 0;
+            border-left: 0; /* Томато для границ */
+        }
     </style>
 </head>
 <body>
 
-<header class="p-4 bg-dark text-white">
+<header class="p-4 text-white" style="background-color: rgb(35,35,35);">
     <div class="container px-4">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
@@ -30,26 +97,26 @@
 
             <div class="container w-50 p-0">
                 <form class="d-flex" method="get" action="/location">
-                    <input type="search" class="form-control form-control-dark fs-5"
+                    <input type="search" class="form-control form-control-dark"
                            placeholder="Enter the location name" aria-label="Search" name="location">
-                    <button class="btn btn-secondary ms-2 fw-bold" type="submit">Search</button>
+                    <button class="btn btn-secondary ms-2" type="submit">Search</button>
                 </form>
             </div>
 
             <div th:if="${sessions == null}">
-                <a href="sign-in" class="btn btn-light me-1 fw-bold">Sign In</a>
-                <a href="registration" class="btn btn-light fw-bold">Register</a>
+                <a href="sign-in" class="btn btn-light me-1">Sign In</a>
+                <a href="registration" class="btn btn-light">Register</a>
             </div>
 
             <div th:unless="${sessions == null}">
                 <div class="dropdown">
-                    <button class="btn btn-lg btn-success dropdown-toggle fw-bold text-white" type="button"
+                    <button class="btn btn-lg btn-success dropdown-toggle text-white" type="button"
                             id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false" th:text="${sessions.getUser().login}">
                         Alex
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark p-0" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item py-2 fs-5" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item py-2" href="/logout">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -58,97 +125,110 @@
     </div>
 </header>
 
-<div class="main-box container bg-light p-4 my-4 rounded-5">
+<div class="main-box container p-4 my-4 rounded-5 transparent-bg" th:if="${sessions != null}">
     <div class="container" id="custom-cards">
-        <h2 class="pb-3 border-bottom border-2 text-center fs-1 fw-bold">Current weather</h2>
+        <div class="border-dark text-center display-4 fw-bold text-dark w-100">Saved Locations</div>
 
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+            <th:block th:each="location:${locationsWeather}">
+
+                <div th:each="weather : ${location.getWeather()}">
+                    <div class="col">
+                        <div class="card card-cover h-100 overflow-hidden text-light rounded-5 secondary-box border-2 border-light"
+                             style="background-color: rgb(41,41,41)">
+                            <div class="d-flex flex-column h-100 text-light text-shadow-1 fixed-height-card">
+                                <div class="d-flex gap-4 mt-3 mx-3">
+                                    <div class="overflow-hidden flex-fill text-center col-9 ms-3 mt-3">
+                                        <div class="fs-3 lh-1 fw-bold mb-0"
+                                             th:text="${location.getName()} + ', ' + ${location.getSys().getCountry()}">
+                                            London,
+                                            UAsdasdasdasdasdasda
+                                        </div>
+                                        <div class="fs-5 lh-1 fw-bold mb-0 pt-2 text-secondary fixed-height"
+                                             th:text="${location.getState()}">
+                                            Область
+                                        </div>
+                                        <div class="rounded-5 text-center"
+                                             style="background-color: rgb(58,58,58)">
+                                            <div class="display-1 fs-3 mt-3 mb-0 p-2"
+                                                 th:text="${weather.getDescription()}">
+                                                Дождь
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-center col-4 d-flex flex-column align-items-center">
+                                        <img class=""
+                                             th:src="@{'https://openweathermap.org/img/wn/' + ${weather.getIcon()} + '@2x.png'}"
+                                             alt="Weather icon">
+                                        <div class="display-1 fs-2 lh-1 text-warning text-center"
+                                             th:text="${location.getMain().getTemp()} + '°'">
+                                            24.5°
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container text-center my-3">
+                                <div class="row mb-3 mt-2">
+                                    <div class="col-6 border-0 border-top border-bottom border-secondary p-0">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Temperature
+                                        </div>
+                                        <div class="d-flex justify-content-center gap-3 p-1">
+                                            <div>
+                                                Min
+                                                <div th:text="${location.getMain().getTemp_min()} + '°'">
+                                                    24.66
+                                                </div>
+                                            </div>
+                                            <div>
+                                                Max
+                                                <div th:text="${location.getMain().getTemp_max()} + '°'">
+                                                    24.66
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 border border-secondary p-0 opacity-">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Feels like
+                                        </div>
+                                        <div class="p-3" th:text="${location.getMain().getFeels_like()} + '°'">
+                                            86
+                                        </div>
+                                    </div>
+                                    <div class="col-3 border-0 border-top border-bottom border-secondary p-0">
+                                        <div class="border-bottom border-secondary fw-bold p-2">
+                                            Humidity
+                                        </div>
+                                        <div class="p-3" th:text="${location.getMain().getHumidity()} + ' мм'">
+                                            86
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form action="/" method="post">
+                                <div class="pb-3 d-flex flex-column mb-3">
+                                    <input type="hidden" name="name" th:value="${location.getName()}"/>
+                                    <input type="hidden" name="latitude" th:value="${location.getLatitude()}"/>
+                                    <input type="hidden" name="longitude" th:value="${location.getLongitude()}"/>
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-0 text-light">Delete
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </th:block>
 
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
-                    <div class="d-flex flex-column h-100 p-4 text-white text-shadow-1">
-                        <div class="d-flex align-items-center mb-4">
-                            <h2 class="display-6 lh-1 fw-bold mb-0">London</h2>
-                            <button type="button" class="btn btn-lg btn-primary ms-auto text-light fw-bold p-2">Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
+
+
+</div>
+</div>
 
 </div>
 
