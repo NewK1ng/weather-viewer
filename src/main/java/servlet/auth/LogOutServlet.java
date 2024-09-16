@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
 import model.entities.Sessions;
+import org.thymeleaf.context.Context;
 import service.SessionsHandlerService;
 
 import java.io.IOException;
@@ -16,7 +17,10 @@ public class LogOutServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Sessions sessions = (Sessions) req.getSession().getAttribute("sessions");
+
+        Context context = (Context) req.getAttribute("context");
+        Sessions sessions = (Sessions) context.getVariable("sessions");
+
         SessionsHandlerService sessionsHandlerService = new SessionsHandlerService();
 
         if (sessions != null) {

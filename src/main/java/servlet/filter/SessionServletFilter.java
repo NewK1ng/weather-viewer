@@ -1,4 +1,4 @@
-package servlet;
+package servlet.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Error;
 import model.entities.Sessions;
+import org.thymeleaf.context.Context;
 import service.SessionsHandlerService;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class SessionServletFilter extends HttpFilter {
 
         Cookie[] cookies = req.getCookies();
 
+        Context context = new Context();
+
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("sessionId")) {
@@ -29,7 +32,7 @@ public class SessionServletFilter extends HttpFilter {
                     try {
                         Sessions sessions = sessionsHandlerService.findById(UUID.fromString(cookie.getValue()));
                         if(sessions != null) {
-                            req.getSession().setAttribute("sessions", sessions);
+                            context.setVariable("sessions", sessions);
                         } else {
                             req.getSession().invalidate();
                         }
@@ -40,8 +43,8 @@ public class SessionServletFilter extends HttpFilter {
             }
         }
 
+        req.setAttribute("context", context);
         chain.doFilter(req, res);
     }
-
 
 }

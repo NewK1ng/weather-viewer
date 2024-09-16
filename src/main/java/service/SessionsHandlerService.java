@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SessionsHandlerService {
-
     private final SessionsDAO sessionsDAO = new SessionsDAO();
     private final static int SESSION_TIMEOUT_MINUTES = 30;
     private final static int ATTEMPTS_TO_CREATE_SESSION = 2;
@@ -61,6 +60,5 @@ public class SessionsHandlerService {
     private boolean isExpired(Sessions sessions) {
         return sessions.getExpiresAt().isBefore(LocalDateTime.now());
     }
-
 }
 

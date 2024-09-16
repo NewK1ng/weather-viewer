@@ -21,7 +21,7 @@ public class LocationDAO {
         }
     }
 
-    public List<Location> findAllByUserId(int userId) throws Error {
+    public List<Location> findAllByUserId(Long userId) throws Error {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();

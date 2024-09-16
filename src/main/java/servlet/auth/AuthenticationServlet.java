@@ -31,7 +31,7 @@ public class AuthenticationServlet extends HttpServlet {
         String loginParam = req.getParameter("login");
         String passwordParam = req.getParameter("password");
 
-        Context context = new Context();
+        Context context = (Context) req.getAttribute("context");
 
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);

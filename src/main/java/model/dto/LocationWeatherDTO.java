@@ -21,14 +21,14 @@ public class LocationWeatherDTO {
     @JsonIgnore
     private BigDecimal longitude;
     @JsonIgnore
-    private String country;
-    @JsonIgnore
     private String state;
 
     @JsonProperty("weather")
     private List<Weather> weather;
     @JsonProperty("main")
     private Main main;
+    @JsonProperty("sys")
+    private Sys sys;
 
     @Getter
     @Setter
@@ -42,6 +42,16 @@ public class LocationWeatherDTO {
         private String description;
         @JsonProperty("icon")
         private String icon;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class Sys{
+        @JsonProperty("country")
+        private String country;
     }
 
     @Getter

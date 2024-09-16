@@ -9,8 +9,8 @@ import model.Error;
 import model.dto.LocationDTO;
 import model.dto.LocationWeatherDTO;
 import org.thymeleaf.context.Context;
-import service.LocationsService;
-import service.WeatherService;
+import service.LocationService;
+import service.LocationWeatherService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
@@ -19,21 +19,21 @@ import java.util.List;
 @WebServlet(urlPatterns = "/location")
 public class SearchLocationsServlet extends HttpServlet {
 
-    private final LocationsService locationsService = new LocationsService();
-    private final WeatherService weatherService = new WeatherService();
-
+    private final LocationService locationService = new LocationService();
+    private final LocationWeatherService locationWeatherService = new LocationWeatherService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String locationParam = req.getParameter("location");
 
+        Context context = (Context) req.getAttribute("context");
+
         if (locationParam != null && !locationParam.isBlank()) {
             try {
-                List<LocationDTO> locations = locationsService.findByName(locationParam);
-                List<LocationWeatherDTO> locationsWeather = weatherService.findByLocationList(locations);
+                List<LocationDTO> locations = locationService.findByName(locationParam);
+                List<LocationWeatherDTO> locationsWeather = locationWeatherService.findByLocationList(locations);
 
-                Context context = new Context();
                 context.setVariable("locationsWeather", locationsWeather);
 
                 ThymeleafUtils.getTemplateEngine().process("search-locations", context, resp.getWriter());
