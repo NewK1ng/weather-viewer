@@ -7,7 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
+import model.CustomException;
 import model.entities.Sessions;
 import org.thymeleaf.context.Context;
 import service.SessionsHandlerService;
@@ -36,7 +36,7 @@ public class SessionServletFilter extends HttpFilter {
                         } else {
                             req.getSession().invalidate();
                         }
-                    } catch (Error e) {
+                    } catch (CustomException e) {
                         throw new RuntimeException(e);
                     }
                 }

@@ -1,14 +1,16 @@
 package dao;
 
+import jakarta.servlet.ServletException;
 import model.entities.Location;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import util.HibernateUtil;
 
 import java.util.List;
 
 public class LocationDAO {
 
-    public void save(Location location) throws Error {
+    public void save(Location location) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -16,12 +18,26 @@ public class LocationDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Error("Something went wrong with database when trying to save location");
+                throw new RuntimeException("Something went wrong with database when trying to save location - " + location.getName() +
+                        ", for user - " + location.getUser().getLogin(),e);
             }
         }
     }
 
-    public List<Location> findAllByUserId(Long userId) throws Error {
+    public void delete(Location location) throws Exception {
+        try (Session session = HibernateUtil.getCurrentSession()) {
+            try {
+                session.beginTransaction();
+                session.remove(location);
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new Exception("Something went wrong with database when trying to delete location");
+            }
+        }
+    }
+
+    public List<Location> findAllByUserId(Long userId) throws Exception {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -35,9 +51,8 @@ public class LocationDAO {
                 return locations;
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Error("Something went wrong with database when trying to find users locations");
+                throw new Exception("Something went wrong with database when trying to find users locations");
             }
         }
     }
-
 }

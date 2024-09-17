@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
+import model.CustomException;
 import model.entities.Sessions;
 import org.thymeleaf.context.Context;
 import service.SessionsHandlerService;
@@ -26,7 +26,7 @@ public class LogOutServlet extends HttpServlet {
         if (sessions != null) {
             try {
                 sessionsHandlerService.delete(sessions);
-            } catch (Error e) {
+            } catch (CustomException e) {
                 throw new RuntimeException(e.getMessage());
             }
         }

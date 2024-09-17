@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
+import model.CustomException;
 import org.thymeleaf.context.Context;
 import service.auth.RegistrationService;
 import util.ThymeleafUtils;
@@ -38,7 +38,7 @@ public class RegistrationServlet extends HttpServlet {
                 registrationService.createUser(loginParam, passwordParam);
                 resp.sendRedirect("/sign-in");
                 return;
-            } catch (Error e) {
+            } catch (CustomException e) {
                 errors.add(e.getMessage());
             }
         }

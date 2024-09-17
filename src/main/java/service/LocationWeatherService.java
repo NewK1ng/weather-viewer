@@ -1,6 +1,6 @@
 package service;
 
-import model.Error;
+import model.CustomException;
 import model.dto.LocationDTO;
 import model.dto.LocationWeatherDTO;
 import util.HttpClientUtils;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LocationWeatherService {
 
-    public List<LocationWeatherDTO> findByLocationList(List<LocationDTO> locationDTOList) throws Error {
+    public List<LocationWeatherDTO> findByLocationList(List<LocationDTO> locationDTOList) throws CustomException {
         URI uri;
         List<LocationWeatherDTO> locationWeatherDTOList = new ArrayList<>();
 
@@ -28,10 +28,10 @@ public class LocationWeatherService {
                     toLocationWeatherDTO(locationDTO, locationWeatherDTO);
                     locationWeatherDTOList.add(locationWeatherDTO);
                 } catch (IOException | InterruptedException e) {
-                    throw new Error("Something went wrong when trying to search locations");
+                    throw new CustomException("Something went wrong when trying to search locations");
                 }
             } catch (URISyntaxException e) {
-                throw new Error("Provide a valid location name");
+                throw new CustomException("Provide a valid location name");
             }
         }
         return locationWeatherDTOList;

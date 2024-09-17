@@ -127,9 +127,10 @@
 
 <div class="main-box container p-4 my-4 rounded-5 transparent-bg">
     <div class="container" id="custom-cards">
-        <div class="border-dark text-center display-4 fw-bold text-dark pb-4 w-100">Search Results</div>
+        <div class="border-dark text-center display-4 fw-bold text-dark w-100">Search Results</div>
 
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 my-3">
+
             <th:block th:each="location:${locationsWeather}">
 
                 <div th:each="weather : ${location.getWeather()}">

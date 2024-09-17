@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
 import model.dto.LocationDTO;
 import model.dto.LocationWeatherDTO;
 import model.entities.Sessions;
@@ -33,13 +32,11 @@ public class HomeServlet extends HttpServlet {
             try {
                 List<LocationDTO> locationDTOList = locationService.findAllByUserId(sessions.getUser().getId());
                 List<LocationWeatherDTO> locationsWeather = locationWeatherService.findByLocationList(locationDTOList);
-
                 context.setVariable("locationsWeather", locationsWeather);
-            } catch (Error e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
             }
         }
-
         ThymeleafUtils.getTemplateEngine().process("home", context, resp.getWriter());
     }
 

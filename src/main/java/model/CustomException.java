@@ -1,10 +1,10 @@
 package model;
 
-public class Error extends Exception {
+public class CustomException extends Exception {
 
     private String message;
 
-    public Error(String message) {
+    public CustomException(String message) {
         this.message = message;
     }
 

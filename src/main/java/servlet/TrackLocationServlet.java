@@ -5,16 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
+import lombok.extern.slf4j.Slf4j;
 import model.entities.Location;
 import model.entities.Sessions;
 import model.entities.Users;
+import org.hibernate.exception.ConstraintViolationException;
 import org.thymeleaf.context.Context;
 import service.LocationService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
+
+@Slf4j
 @WebServlet("/track-location")
 public class TrackLocationServlet extends HttpServlet {
 
@@ -35,11 +38,14 @@ public class TrackLocationServlet extends HttpServlet {
 
         try {
             locationService.save(location);
-        } catch (Error e) {
+        } catch (Exception e) {
+//            if (e instanceof ConstraintViolationException) {
+//                resp.sendRedirect("/");
+//                return;
+//            }
             throw new RuntimeException(e);
         }
 
         resp.sendRedirect("/");
-
     }
 }

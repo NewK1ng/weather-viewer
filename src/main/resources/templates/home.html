@@ -129,7 +129,7 @@
     <div class="container" id="custom-cards">
         <div class="border-dark text-center display-4 fw-bold text-dark w-100">Saved Locations</div>
 
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 my-3">
             <th:block th:each="location:${locationsWeather}">
 
                 <div th:each="weather : ${location.getWeather()}">

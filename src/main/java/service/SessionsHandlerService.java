@@ -1,7 +1,7 @@
 package service;
 
 import dao.SessionsDAO;
-import model.Error;
+import model.CustomException;
 import model.entities.Sessions;
 import model.entities.Users;
 
@@ -14,7 +14,7 @@ public class SessionsHandlerService {
     private final static int SESSION_TIMEOUT_MINUTES = 30;
     private final static int ATTEMPTS_TO_CREATE_SESSION = 2;
 
-    public UUID create(Users user) throws Error {
+    public UUID create(Users user) throws CustomException {
         for (int i = 0; i < ATTEMPTS_TO_CREATE_SESSION; i++) {
             try {
                 UUID sessionId = UUID.randomUUID();
@@ -24,17 +24,17 @@ public class SessionsHandlerService {
                 sessionsDAO.save(sessions);
 
                 return sessionId;
-            } catch (Error e) {
+            } catch (CustomException e) {
                 i++;
                 if (i == ATTEMPTS_TO_CREATE_SESSION) {
-                    throw new Error("Something went wrong with database when trying to create session");
+                    throw new CustomException("Something went wrong with database when trying to create session");
                 }
             }
         }
         return null;
     }
 
-    public Sessions findById(UUID sessionId) throws Error {
+    public Sessions findById(UUID sessionId) throws CustomException {
        Optional<Sessions> sessionsOpt = sessionsDAO.findById(sessionId);
        if(sessionsOpt.isPresent()) {
 
@@ -48,11 +48,11 @@ public class SessionsHandlerService {
        return null;
     }
 
-    public void delete(Sessions sessions) throws Error {
+    public void delete(Sessions sessions) throws CustomException {
         sessionsDAO.delete(sessions);
     }
 
-    private void updateExpiresAt(Sessions sessions) throws Error {
+    private void updateExpiresAt(Sessions sessions) throws CustomException {
         sessions.setExpiresAt(LocalDateTime.now().plusMinutes(SESSION_TIMEOUT_MINUTES));
         sessionsDAO.update(sessions);
     }

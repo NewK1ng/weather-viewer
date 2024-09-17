@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Error;
 import model.dto.LocationDTO;
 import model.dto.LocationWeatherDTO;
 import org.thymeleaf.context.Context;
@@ -26,7 +25,6 @@ public class SearchLocationsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String locationParam = req.getParameter("location");
-
         Context context = (Context) req.getAttribute("context");
 
         if (locationParam != null && !locationParam.isBlank()) {
@@ -38,7 +36,7 @@ public class SearchLocationsServlet extends HttpServlet {
 
                 ThymeleafUtils.getTemplateEngine().process("search-locations", context, resp.getWriter());
 
-            } catch (Error e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
             }
         } else {

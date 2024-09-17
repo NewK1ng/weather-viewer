@@ -2,7 +2,7 @@ package service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dao.LocationDAO;
-import model.Error;
+import model.CustomException;
 import model.dto.LocationDTO;
 import model.entities.Location;
 import util.HttpClientUtils;
@@ -17,29 +17,33 @@ public class LocationService {
 
     private final LocationDAO locationDAO = new LocationDAO();
 
-    public List<LocationDTO> findByName(String location) throws Error {
+    public List<LocationDTO> findByName(String location) throws Exception {
         URI uri;
 
         try {
             uri = new URI("http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&limit=5&appid=" + System.getenv("APP_ID"));
         } catch (URISyntaxException e) {
-            throw new Error("Provide a valid location name");
+            throw new CustomException("Provide a valid location name");
         }
 
         try {
             String response = HttpClientUtils.sendGetRequest(uri);
             return HttpClientUtils.deserializeJsonToList(response, new TypeReference<>() {});
         } catch (IOException | InterruptedException e) {
-            throw new Error("Something went wrong when trying to search locations");
+            throw new CustomException("Something went wrong when trying to search locations");
         }
     }
 
-    public List<LocationDTO> findAllByUserId(Long userId) throws Error {
+    public List<LocationDTO> findAllByUserId(Long userId) throws Exception {
         List<Location> location = locationDAO.findAllByUserId(userId);
         return toLocationDTOList(location);
     }
 
-    public void save(Location location) throws Error {
+    public void delete(Location location) throws Exception {
+        locationDAO.delete(location);
+    }
+
+    public void save(Location location) {
         locationDAO.save(location);
     }
 
@@ -53,7 +57,6 @@ public class LocationService {
             locationDTO.setName(location.getName());
             locationDTOList.add(locationDTO);
         }
-
         return locationDTOList;
     }
 }

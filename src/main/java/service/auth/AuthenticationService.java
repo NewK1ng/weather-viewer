@@ -1,7 +1,7 @@
 package service.auth;
 
 import dao.UsersDAO;
-import model.Error;
+import model.CustomException;
 import model.entities.Users;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -21,7 +21,7 @@ public class AuthenticationService {
             }
         }
 
-        throw new Error("Login or password is incorrect");
+        throw new CustomException("Login or password is incorrect");
     }
 
     public boolean checkPassword(String password, String hash) {

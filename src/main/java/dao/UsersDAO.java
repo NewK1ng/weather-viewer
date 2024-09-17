@@ -1,6 +1,6 @@
 package dao;
 
-import model.Error;
+import model.CustomException;
 import model.entities.Users;
 import org.hibernate.Session;
 import util.HibernateUtil;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class UsersDAO {
 
-    public void save(Users users) throws Error {
+    public void save(Users users) throws CustomException {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -19,12 +19,12 @@ public class UsersDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Error("Login already exists");
+                throw new CustomException("Login already exists");
             }
         }
     }
 
-    public Optional<Users> findByLogin(String login) throws Error {
+    public Optional<Users> findByLogin(String login) throws CustomException {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
 
@@ -39,7 +39,7 @@ public class UsersDAO {
                 return Optional.ofNullable(userOpt);
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Error("Something went wrong with database when trying to find user");
+                throw new CustomException("Something went wrong with database when trying to find user");
             }
         }
     }
