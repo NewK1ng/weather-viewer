@@ -2,44 +2,49 @@ package service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dao.LocationDAO;
-import model.CustomException;
 import model.dto.LocationDTO;
 import model.entities.Location;
+import org.apache.hc.core5.net.URIBuilder;
 import util.HttpClientUtils;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LocationService {
 
     private final LocationDAO locationDAO = new LocationDAO();
 
-    public List<LocationDTO> findByName(String location) throws Exception {
-        URI uri;
-
+    public List<LocationDTO> findByName(String location) {
         try {
-            uri = new URI("http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&limit=5&appid=" + System.getenv("APP_ID"));
+            URI uri = new URIBuilder("http://api.openweathermap.org/geo/1.0/direct")
+                    .addParameter("q", location)
+                    .addParameter("limit","5")
+                    .addParameter("appid", System.getenv("APP_ID"))
+                    .build();
+
+            String jsonResponse = HttpClientUtils.sendGetRequest(uri);
+            return HttpClientUtils.deserializeJsonToList(jsonResponse, new TypeReference<>() {
+            });
         } catch (URISyntaxException e) {
-            throw new CustomException("Provide a valid location name");
-        }
-
-        try {
-            String response = HttpClientUtils.sendGetRequest(uri);
-            return HttpClientUtils.deserializeJsonToList(response, new TypeReference<>() {});
-        } catch (IOException | InterruptedException e) {
-            throw new CustomException("Something went wrong when trying to search locations");
+            throw new RuntimeException(e);
         }
     }
 
-    public List<LocationDTO> findAllByUserId(Long userId) throws Exception {
-        List<Location> location = locationDAO.findAllByUserId(userId);
-        return toLocationDTOList(location);
+    public List<LocationDTO> findAllByUserId(Long userId) {
+        Optional<List<Location>> locationListOpt = locationDAO.findAllByUserId(userId);
+
+        if (locationListOpt.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            List<Location> locationList = locationListOpt.get();
+            return toLocationDTOList(locationList);
+        }
     }
 
-    public void delete(Location location) throws Exception {
+    public void delete(Location location) {
         locationDAO.delete(location);
     }
 

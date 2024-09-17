@@ -15,6 +15,7 @@ import util.ThymeleafUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/")
 public class HomeServlet extends HttpServlet {
@@ -24,7 +25,6 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         Context context = (Context) req.getAttribute("context");
         Sessions sessions = (Sessions) context.getVariable("sessions");
 
@@ -34,9 +34,10 @@ public class HomeServlet extends HttpServlet {
                 List<LocationWeatherDTO> locationsWeather = locationWeatherService.findByLocationList(locationDTOList);
                 context.setVariable("locationsWeather", locationsWeather);
             } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException(e);
             }
         }
+
         ThymeleafUtils.getTemplateEngine().process("home", context, resp.getWriter());
     }
 

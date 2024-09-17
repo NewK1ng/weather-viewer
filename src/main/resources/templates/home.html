@@ -92,7 +92,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
             <ul class="nav">
-                <li><a href="/" class="nav-link text-white fs-1 p-0">Weather App</We></a></li>
+                <li><a href="/" class="nav-link text-white fs-1 p-0">Weather App</a></li>
             </ul>
 
             <div class="container w-50 p-0">
@@ -207,7 +207,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <form action="/" method="post">
+                            <form action="/delete-location" method="post">
                                 <div class="pb-3 d-flex flex-column mb-3">
                                     <input type="hidden" name="name" th:value="${location.getName()}"/>
                                     <input type="hidden" name="latitude" th:value="${location.getLatitude()}"/>
@@ -226,9 +226,6 @@
         </div>
     </div>
 
-
-</div>
-</div>
 
 </div>
 

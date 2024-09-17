@@ -1,6 +1,5 @@
 package dao;
 
-import model.CustomException;
 import model.entities.Sessions;
 import org.hibernate.Session;
 import util.HibernateUtil;
@@ -9,8 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SessionsDAO {
-
-    public void save(Sessions sessions) throws CustomException {
+    public void save(Sessions sessions) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -18,12 +16,12 @@ public class SessionsDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new CustomException("Session already exists");
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public void update(Sessions sessions) throws CustomException {
+    public void update(Sessions sessions) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -31,12 +29,12 @@ public class SessionsDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new CustomException("Something went wrong with database when trying to update session");
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public void delete(Sessions sessions) throws CustomException {
+    public void delete(Sessions sessions) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -44,12 +42,12 @@ public class SessionsDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new CustomException("Something went wrong with database when trying to delete session");
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public Optional<Sessions> findById(UUID id) throws CustomException {
+    public Optional<Sessions> findById(UUID id) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -61,9 +59,8 @@ public class SessionsDAO {
                 return Optional.ofNullable(sessions);
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new CustomException("Something went wrong with database when trying to find session");
+                throw new RuntimeException(e);
             }
         }
     }
-
 }

@@ -25,25 +25,30 @@ public class TrackLocationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String nameParam = req.getParameter("name");
         String latitudeParam = req.getParameter("latitude");
         String longitudeParam = req.getParameter("longitude");
 
         Context context = (Context) req.getAttribute("context");
         Sessions sessions = (Sessions) context.getVariable("sessions");
-        Users user = sessions.getUser();
 
-        Location location = new Location(nameParam, user, new BigDecimal(latitudeParam), new BigDecimal(longitudeParam));
+        if (nameParam != null && latitudeParam != null && longitudeParam != null && sessions != null) {
 
-        try {
-            locationService.save(location);
-        } catch (Exception e) {
-//            if (e instanceof ConstraintViolationException) {
-//                resp.sendRedirect("/");
-//                return;
-//            }
-            throw new RuntimeException(e);
+            Users user = sessions.getUser();
+            BigDecimal latitude = new BigDecimal(latitudeParam);
+            BigDecimal longitude = new BigDecimal(longitudeParam);
+
+            Location location = new Location(nameParam, user, latitude, longitude);
+
+            try {
+                locationService.save(location);
+            } catch (Exception e) {
+                if (e.getCause() instanceof ConstraintViolationException) {
+                    resp.sendRedirect("/");
+                    return;
+                }
+                throw new RuntimeException(e);
+            }
         }
 
         resp.sendRedirect("/");

@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
 
 public class HttpClientUtils {
@@ -21,22 +22,34 @@ public class HttpClientUtils {
     }
 
     static {
-        client = HttpClient.newHttpClient();
+        client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
         objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static String sendGetRequest(URI uri) throws IOException, InterruptedException {
+    public static String sendGetRequest(URI uri) {
         HttpRequest request = HttpRequest.newBuilder(uri).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return response.body();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static <T> List<T> deserializeJsonToList(String json, TypeReference<List<T>> type) throws JsonProcessingException {
-        return objectMapper.readValue(json, type);
+    public static <T> List<T> deserializeJsonToList(String json, TypeReference<List<T>> type) {
+        try {
+            return objectMapper.readValue(json, type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static <T> T deserializeJsonToObject(String json, Class<T> type) throws JsonProcessingException {
-        return objectMapper.readValue(json,type);
+    public static <T> T deserializeJsonToObject(String json, Class<T> type) {
+        try {
+            return objectMapper.readValue(json,type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

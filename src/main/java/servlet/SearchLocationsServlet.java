@@ -23,7 +23,6 @@ public class SearchLocationsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String locationParam = req.getParameter("location");
         Context context = (Context) req.getAttribute("context");
 
@@ -37,7 +36,7 @@ public class SearchLocationsServlet extends HttpServlet {
                 ThymeleafUtils.getTemplateEngine().process("search-locations", context, resp.getWriter());
 
             } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException(e);
             }
         } else {
             resp.sendRedirect("/");

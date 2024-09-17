@@ -1,7 +1,6 @@
 package service.auth;
 
 import dao.UsersDAO;
-import model.CustomException;
 import model.entities.Users;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -27,16 +26,10 @@ public class RegistrationService {
         return errors;
     }
 
-    public void createUser(String loginParam, String passwordParam) throws CustomException {
-
+    public void createUser(String loginParam, String passwordParam) {
         String hashedPassword = hashPassword(passwordParam);
         Users user = new Users(loginParam, hashedPassword);
-
-        try {
-            userDAO.save(user);
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        }
+        userDAO.save(user);
     }
 
     public String hashPassword(String password) {

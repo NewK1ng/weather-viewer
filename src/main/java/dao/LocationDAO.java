@@ -1,15 +1,13 @@
 package dao;
 
-import jakarta.servlet.ServletException;
 import model.entities.Location;
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 import util.HibernateUtil;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LocationDAO {
-
     public void save(Location location) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
@@ -19,12 +17,12 @@ public class LocationDAO {
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new RuntimeException("Something went wrong with database when trying to save location - " + location.getName() +
-                        ", for user - " + location.getUser().getLogin(),e);
+                        " for user - " + location.getUser().getLogin(), e);
             }
         }
     }
 
-    public void delete(Location location) throws Exception {
+    public void delete(Location location) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -32,12 +30,13 @@ public class LocationDAO {
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Exception("Something went wrong with database when trying to delete location");
+                throw new RuntimeException("Something went wrong with database when trying to remove location - " + location.getName() +
+                        " for user - " + location.getUser().getLogin(), e);
             }
         }
     }
 
-    public List<Location> findAllByUserId(Long userId) throws Exception {
+    public Optional<List<Location>> findAllByUserId(Long userId) {
         try (Session session = HibernateUtil.getCurrentSession()) {
             try {
                 session.beginTransaction();
@@ -48,10 +47,14 @@ public class LocationDAO {
 
                 session.getTransaction().commit();
 
-                return locations;
+                if (locations.isEmpty()) {
+                    return Optional.empty();
+                } else {
+                    return Optional.of(locations);
+                }
             } catch (Exception e) {
                 session.getTransaction().rollback();
-                throw new Exception("Something went wrong with database when trying to find users locations");
+                throw new RuntimeException("Something went wrong with database when trying to get all locations for userId - " + userId, e);
             }
         }
     }

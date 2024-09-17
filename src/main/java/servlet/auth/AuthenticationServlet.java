@@ -3,6 +3,7 @@ package servlet.auth;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import model.entities.Sessions;
 import model.entities.Users;
 import org.thymeleaf.context.Context;
 import service.auth.AuthenticationService;
@@ -10,6 +11,8 @@ import service.SessionsHandlerService;
 import util.ThymeleafUtils;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
 
 @WebServlet(urlPatterns = "/sign-in")
 public class AuthenticationServlet extends HttpServlet {
@@ -19,7 +22,10 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getSession().getAttribute("sessions") != null) {
+        Context context = (Context) req.getAttribute("context");
+        Sessions sessions = (Sessions) context.getVariable("sessions");
+
+        if (sessions != null) {
             resp.sendRedirect("/");
         }
 
@@ -35,13 +41,17 @@ public class AuthenticationServlet extends HttpServlet {
 
         try {
             Users user = authenticationService.signIn(loginParam, passwordParam);
+            Optional<UUID> sessionIdOpt = sessionsHandlerService.create(user);
 
-            String sessionId = String.valueOf(sessionsHandlerService.create(user));
-            Cookie cookie = new Cookie("sessionId", sessionId);
-            cookie.setMaxAge(60 * 60 * 24 * 30);
-            resp.addCookie(cookie);
-
-            resp.sendRedirect("/");
+            if (sessionIdOpt.isPresent()) {
+                String sessionId = String.valueOf(sessionIdOpt.get());
+                Cookie cookie = new Cookie("sessionId", sessionId);
+                cookie.setMaxAge(60 * 60 * 24 * 30);
+                resp.addCookie(cookie);
+                resp.sendRedirect("/");
+            } else {
+                throw new ServletException("Failed to create session");
+            }
         } catch (Exception e) {
             context.setVariable("error", e.getMessage());
         }

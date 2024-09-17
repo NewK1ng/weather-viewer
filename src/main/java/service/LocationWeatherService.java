@@ -1,11 +1,10 @@
 package service;
 
-import model.CustomException;
 import model.dto.LocationDTO;
 import model.dto.LocationWeatherDTO;
+import org.apache.hc.core5.net.URIBuilder;
 import util.HttpClientUtils;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -13,25 +12,27 @@ import java.util.List;
 
 public class LocationWeatherService {
 
-    public List<LocationWeatherDTO> findByLocationList(List<LocationDTO> locationDTOList) throws CustomException {
-        URI uri;
+    public List<LocationWeatherDTO> findByLocationList(List<LocationDTO> locationDTOList) {
         List<LocationWeatherDTO> locationWeatherDTOList = new ArrayList<>();
 
         for (LocationDTO locationDTO : locationDTOList) {
             try {
-                uri = new URI("https://api.openweathermap.org/data/2.5/weather?lat=" + locationDTO.getLatitude() +
-                        "&lon=" + locationDTO.getLongitude() + "&units=metric&appid=" + System.getenv("APP_ID") + "&lang=en");
-                try {
-                    String response = HttpClientUtils.sendGetRequest(uri);
+                URI uri = new URIBuilder("https://api.openweathermap.org/data/2.5/weather")
+                        .addParameter("lat", String.valueOf(locationDTO.getLatitude()))
+                        .addParameter("lon", String.valueOf(locationDTO.getLongitude()))
+                        .addParameter("units", "metric")
+                        .addParameter("appid", System.getenv("APP_ID"))
+                        .addParameter("lang", "en")
+                        .build();
 
-                    LocationWeatherDTO locationWeatherDTO = HttpClientUtils.deserializeJsonToObject(response, LocationWeatherDTO.class);
-                    toLocationWeatherDTO(locationDTO, locationWeatherDTO);
-                    locationWeatherDTOList.add(locationWeatherDTO);
-                } catch (IOException | InterruptedException e) {
-                    throw new CustomException("Something went wrong when trying to search locations");
-                }
+                String jsonResponse = HttpClientUtils.sendGetRequest(uri);
+
+                LocationWeatherDTO locationWeatherDTO = HttpClientUtils.deserializeJsonToObject(jsonResponse, LocationWeatherDTO.class);
+                toLocationWeatherDTO(locationDTO, locationWeatherDTO);
+
+                locationWeatherDTOList.add(locationWeatherDTO);
             } catch (URISyntaxException e) {
-                throw new CustomException("Provide a valid location name");
+                throw new RuntimeException(e);
             }
         }
         return locationWeatherDTOList;

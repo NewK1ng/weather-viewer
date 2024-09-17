@@ -1,7 +1,6 @@
 package service;
 
 import dao.SessionsDAO;
-import model.CustomException;
 import model.entities.Sessions;
 import model.entities.Users;
 
@@ -14,7 +13,7 @@ public class SessionsHandlerService {
     private final static int SESSION_TIMEOUT_MINUTES = 30;
     private final static int ATTEMPTS_TO_CREATE_SESSION = 2;
 
-    public UUID create(Users user) throws CustomException {
+    public Optional<UUID> create(Users user) {
         for (int i = 0; i < ATTEMPTS_TO_CREATE_SESSION; i++) {
             try {
                 UUID sessionId = UUID.randomUUID();
@@ -23,36 +22,37 @@ public class SessionsHandlerService {
                 Sessions sessions = new Sessions(sessionId, user, expiresAtTime);
                 sessionsDAO.save(sessions);
 
-                return sessionId;
-            } catch (CustomException e) {
+                return Optional.of(sessionId);
+            } catch (Exception e) {
                 i++;
                 if (i == ATTEMPTS_TO_CREATE_SESSION) {
-                    throw new CustomException("Something went wrong with database when trying to create session");
+                    throw new RuntimeException("Something went wrong with database when trying to create session",e);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public Sessions findById(UUID sessionId) throws CustomException {
+    public Optional<Sessions> findById(UUID sessionId) {
        Optional<Sessions> sessionsOpt = sessionsDAO.findById(sessionId);
-       if(sessionsOpt.isPresent()) {
 
+       if(sessionsOpt.isPresent()) {
            Sessions sessions = sessionsOpt.get();
 
            if(!isExpired(sessions)) {
                updateExpiresAt(sessions);
-               return sessions;
+               return sessionsOpt;
            }
        }
-       return null;
+
+       return Optional.empty();
     }
 
-    public void delete(Sessions sessions) throws CustomException {
+    public void delete(Sessions sessions) {
         sessionsDAO.delete(sessions);
     }
 
-    private void updateExpiresAt(Sessions sessions) throws CustomException {
+    private void updateExpiresAt(Sessions sessions) {
         sessions.setExpiresAt(LocalDateTime.now().plusMinutes(SESSION_TIMEOUT_MINUTES));
         sessionsDAO.update(sessions);
     }
