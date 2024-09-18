@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import model.entities.Location;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,21 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class LocationWeatherDTO {
+
     @JsonIgnore
-    private String name;
-    @JsonIgnore
-    private BigDecimal latitude;
-    @JsonIgnore
-    private BigDecimal longitude;
-    @JsonIgnore
-    private String state;
+    private LocationDTO location;
 
     @JsonProperty("weather")
     private List<Weather> weather;
     @JsonProperty("main")
     private Main main;
-    @JsonProperty("sys")
-    private Sys sys;
 
     @Getter
     @Setter
@@ -49,16 +43,6 @@ public class LocationWeatherDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class Sys{
-        @JsonProperty("country")
-        private String country;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @ToString
     public static class Main {
         @JsonProperty("temp")
         private double temp;
@@ -71,7 +55,4 @@ public class LocationWeatherDTO {
         @JsonProperty("feels_like")
         private double feels_like;
     }
-
-
-
 }

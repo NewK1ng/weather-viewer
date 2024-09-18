@@ -1,10 +1,7 @@
 package model.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
@@ -15,6 +12,7 @@ import java.util.Objects;
 @Entity
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "locations")
 public class Location {
     @Id
@@ -36,11 +34,19 @@ public class Location {
     @Column(name = "longitude", nullable = false)
     private BigDecimal longitude;
 
-    public Location(String name, Users user, BigDecimal latitude, BigDecimal longitude) {
+    @Column(name = "country", nullable = false, length = 2)
+    private String country;
+
+    @Column(name = "state", length = 64)
+    private String state;
+
+    public Location(String name, Users user, BigDecimal latitude, BigDecimal longitude, String country, String state) {
         this.name = name;
         this.user = user;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.country = country;
+        this.state = state;
     }
 
     @Override

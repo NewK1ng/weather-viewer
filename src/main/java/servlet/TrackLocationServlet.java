@@ -28,27 +28,26 @@ public class TrackLocationServlet extends HttpServlet {
         String nameParam = req.getParameter("name");
         String latitudeParam = req.getParameter("latitude");
         String longitudeParam = req.getParameter("longitude");
+        String stateParam = req.getParameter("state");
+        String countryParam = req.getParameter("country");
 
-        Context context = (Context) req.getAttribute("context");
-        Sessions sessions = (Sessions) context.getVariable("sessions");
-
-        if (nameParam != null && latitudeParam != null && longitudeParam != null && sessions != null) {
+        try {
+            Context context = (Context) req.getAttribute("context");
+            Sessions sessions = (Sessions) context.getVariable("sessions");
 
             Users user = sessions.getUser();
             BigDecimal latitude = new BigDecimal(latitudeParam);
             BigDecimal longitude = new BigDecimal(longitudeParam);
 
-            Location location = new Location(nameParam, user, latitude, longitude);
+            Location location = new Location(nameParam, user, latitude, longitude,countryParam, stateParam);
+            locationService.save(location);
 
-            try {
-                locationService.save(location);
-            } catch (Exception e) {
-                if (e.getCause() instanceof ConstraintViolationException) {
-                    resp.sendRedirect("/");
-                    return;
-                }
-                throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                resp.sendRedirect("/");
+                return;
             }
+            throw new RuntimeException(e);
         }
 
         resp.sendRedirect("/");

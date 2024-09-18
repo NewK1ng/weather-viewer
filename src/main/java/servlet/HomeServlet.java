@@ -15,7 +15,6 @@ import util.ThymeleafUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/")
 public class HomeServlet extends HttpServlet {
@@ -32,6 +31,7 @@ public class HomeServlet extends HttpServlet {
             try {
                 List<LocationDTO> locationDTOList = locationService.findAllByUserId(sessions.getUser().getId());
                 List<LocationWeatherDTO> locationsWeather = locationWeatherService.findByLocationList(locationDTOList);
+
                 context.setVariable("locationsWeather", locationsWeather);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -40,5 +40,4 @@ public class HomeServlet extends HttpServlet {
 
         ThymeleafUtils.getTemplateEngine().process("home", context, resp.getWriter());
     }
-
 }

@@ -57,9 +57,14 @@ public class LocationService {
 
         for (Location location : locationList) {
             LocationDTO locationDTO = new LocationDTO();
+
+            locationDTO.setId(location.getId());
+            locationDTO.setName(location.getName());
             locationDTO.setLatitude(location.getLatitude());
             locationDTO.setLongitude(location.getLongitude());
-            locationDTO.setName(location.getName());
+            locationDTO.setCountry(location.getCountry());
+            locationDTO.setState(location.getState());
+
             locationDTOList.add(locationDTO);
         }
         return locationDTOList;

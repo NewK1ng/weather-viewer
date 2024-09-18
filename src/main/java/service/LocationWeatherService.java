@@ -28,7 +28,7 @@ public class LocationWeatherService {
                 String jsonResponse = HttpClientUtils.sendGetRequest(uri);
 
                 LocationWeatherDTO locationWeatherDTO = HttpClientUtils.deserializeJsonToObject(jsonResponse, LocationWeatherDTO.class);
-                toLocationWeatherDTO(locationDTO, locationWeatherDTO);
+                locationWeatherDTO.setLocation(locationDTO);
 
                 locationWeatherDTOList.add(locationWeatherDTO);
             } catch (URISyntaxException e) {
@@ -36,12 +36,5 @@ public class LocationWeatherService {
             }
         }
         return locationWeatherDTOList;
-    }
-
-    private void toLocationWeatherDTO(LocationDTO locationDTO, LocationWeatherDTO locationWeatherDTO) {
-        locationWeatherDTO.setName(locationDTO.getName());
-        locationWeatherDTO.setLatitude(locationDTO.getLatitude());
-        locationWeatherDTO.setLongitude(locationDTO.getLongitude());
-        locationWeatherDTO.setState(locationDTO.getState());
     }
 }

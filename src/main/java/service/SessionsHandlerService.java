@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class SessionsHandlerService {
     private final SessionsDAO sessionsDAO = new SessionsDAO();
+
     private final static int SESSION_TIMEOUT_MINUTES = 30;
     private final static int ATTEMPTS_TO_CREATE_SESSION = 2;
 
